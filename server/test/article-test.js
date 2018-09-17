@@ -35,7 +35,7 @@ describe("Article", function() {
 
 describe("Article", function() {
 
-  let usertoken, author, articleId;
+  let usertoken, author = '' , articleId = '';
   let title = "Testing",
       desc = "",
       category = "",
@@ -60,7 +60,7 @@ describe("Article", function() {
               }, process.env.ACCESS_KEY,
                 function(err, token) {
                   usertoken = token,
-                  author = userId
+                  author = String(userId)
                   done()
                 }
               );
@@ -84,7 +84,7 @@ describe("Article", function() {
         commentlist
       })
       .end(function(err, res) {
-        articleId = res.body.arts._id
+        articleId = String(res.body.arts._id)
         console.log(res.body)
         expect(res).to.have.status(200);
         expect(res.body).to.be.a("object");
@@ -97,31 +97,46 @@ describe("Article", function() {
   });
 
   it("/GET articles should return this user's articles", function(done) {
-    console.log('see here',author)
+    let arts = new Article({
+      title,
+      author,
+      desc,
+      category,
+      commentlist
+    })
+    arts.save((err, arts) => {
     chai
       .request(app)
       .get(`/articles/${author}`)
       .set('token', usertoken)
+      .send(arts)
       .end(function(err, res) {
         console.log(res.body)
         expect(res).to.have.status(200);
         expect(res.body).to.be.a("object");
         done();
       });
+    })
   });
 
   it("/PUT articles should return updated articles", function(done) {
-    title = "Testing 2",
-    desc = "Fill description for second"
-    chai
+    let arts = new Article({
+      title,
+      author,
+      desc,
+      category,
+      commentlist
+    })
+    arts.save((err, arts) => {
+      chai
       .request(app)
       .put(`/articles/${articleId}`)
       .set('token', usertoken)
       .send({
-        articleId,
-        title,
+        _id: arts._id,
+        title : "Testing 2",
         author,
-        desc,
+        desc : "Fill description for second",
         category,
         commentlist
       })
@@ -132,15 +147,24 @@ describe("Article", function() {
         expect(res.body).to.have.property('upd')
         expect(res.body.upd).to.have.property('title')
         expect(res.body.upd).to.have.property('author')
-        expect(res.body.upd.title).to.equal(title)
+        expect(res.body.upd.author).to.equal(author)
         done();
       });
+    })
   });
 
   it("/DELETE articles should return status deleted articles", function(done) {
-    chai
+    let arts = new Article({
+      title,
+      author,
+      desc,
+      category,
+      commentlist
+    })
+    arts.save((err, arts) => {
+      chai
       .request(app)
-      .del(`/articles/${articleId}`)
+      .del(`/articles/${arts._id}`)
       .set('token', usertoken)
       .end(function(err, res) {
         console.log(res.body)
@@ -150,6 +174,7 @@ describe("Article", function() {
         expect(res.body.message).to.equal(`succesfully deleted article`)
         done();
       });
+    })
   });
 
   afterEach(function(done) {
