@@ -85,7 +85,7 @@ describe("Article", function() {
       })
       .end(function(err, res) {
         articleId = String(res.body.arts._id)
-        console.log(res.body)
+        // console.log(res.body)
         expect(res).to.have.status(200);
         expect(res.body).to.be.a("object");
         expect(res.body).to.have.property('arts')
@@ -111,7 +111,7 @@ describe("Article", function() {
       .set('token', usertoken)
       .send(arts)
       .end(function(err, res) {
-        console.log(res.body)
+        // console.log(res.body)
         expect(res).to.have.status(200);
         expect(res.body).to.be.a("object");
         done();
@@ -141,7 +141,7 @@ describe("Article", function() {
         commentlist
       })
       .end(function(err, res) {
-        console.log(res.body)
+        // console.log(res.body)
         expect(res).to.have.status(200);
         expect(res.body).to.be.a("object");
         expect(res.body).to.have.property('upd')
@@ -167,7 +167,7 @@ describe("Article", function() {
       .del(`/articles/${arts._id}`)
       .set('token', usertoken)
       .end(function(err, res) {
-        console.log(res.body)
+        // console.log(res.body)
         expect(res).to.have.status(200);
         expect(res.body).to.be.a("object");
         expect(res.body).to.have.property('message')

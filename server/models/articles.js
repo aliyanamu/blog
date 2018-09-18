@@ -4,24 +4,23 @@ const mongoose = require("mongoose"),
 const articleScheme = new Schema(
   {
     title: {
-        type: String,
-        required: [true, 'title is required']
+      type: String,
+      required: [true, "title is required"]
     },
     author: {
-        required: [true, 'author is required'],
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+      required: [true, "author is required"],
+      type: Schema.Types.ObjectId,
+      ref: "User"
     },
     desc: {
-        type: String
+      type: String
     },
     category: {
-        type: String
+      type: String
     },
-    
     commentlist: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
+      type: Schema.Types.ObjectId,
+      ref: "Comment"
     }]
   },
   {

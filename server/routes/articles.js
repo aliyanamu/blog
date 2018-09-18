@@ -9,7 +9,7 @@ router
 
     .post('/', isLogin, insert)
     
-    .get('/:userid', isLogin, authdulu, getMyArticle)
+    .get('/:userid', isLogin, getMyArticle)
 
     .put('/:id', isLogin, authdulu, update)
 

@@ -7,7 +7,8 @@ const express = require('express'),
       bodyParser= require('body-parser');
 
 const usersRouter = require('./routes/users'),
-      articlesRouter = require('./routes/articles');
+      articlesRouter = require('./routes/articles'),
+      commentsRouter = require('./routes/comments');
 
 let PORT = 3000 || PORT;
 
@@ -47,6 +48,7 @@ app
 
 app
   .use('/users', usersRouter)
-  .use('/articles', articlesRouter);
+  .use('/articles', articlesRouter)
+  .use('/comments', commentsRouter);
 
 module.exports = app

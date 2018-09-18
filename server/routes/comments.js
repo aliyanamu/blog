@@ -5,9 +5,9 @@ const express = require('express'),
 
 /* GET articles listing. */
 router
-    .get('/', list)
+    .get('/:artid', list)
 
-    .post('/', isLogin, insert)
+    .post('/:artid', isLogin, authdulu, insert)
 
     .delete('/:id', isLogin, authdulu, remove)
 

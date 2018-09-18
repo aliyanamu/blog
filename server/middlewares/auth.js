@@ -32,7 +32,7 @@ module.exports = {
 
   authdulu: function(req, res, next) {
     Article.findOne({
-      userId: req.userId
+      author: req.userId
     })
       .populate("author")
       .then(function(article) {

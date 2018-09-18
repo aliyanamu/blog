@@ -1,37 +1,65 @@
 const Comment = require("../models/comments"),
+  Article = require("../models/articles"),
   ObjectId = require("mongodb").ObjectId;
 
 module.exports = {
   list: (req, res) => {
-    console.log('masuk controllers/comments -> list')
-    Comment.find()
+    console.log("masuk controllers/comments -> list");
+    Article.findOne({
+      _id: ObjectId(req.params.artid)
+    })
       .populate("commentlist")
-      .exec(function(err, comments) {
+      .exec(function(err, article) {
         if (err) {
           res.status(500).json({
             message: err.message
           });
         } else {
-          res.status(200).json({
-            comments: comments
-          });
+          Comment.find()
+            .populate("owner")
+            .exec(function(err, comments) {
+              if (err) {
+                res.status(500).json({
+                  message: err.message
+                });
+              } else {
+                res.status(200).json({
+                  comments: comments
+                });
+              }
+            });
         }
       });
   },
 
   insert: (req, res) => {
-    console.log('masuk controllers/comments -> create')
+    console.log("masuk controllers/comments -> create");
     let commt = new Comment({
       owner: req.body.owner,
       comment: req.body.comment
     });
     commt.save(function(err) {
       if (!err) {
-        res.status(200).json({
-          message: `succesfully made comment`,
-          commt
-        });
+        Article.updateOne({
+          _id: ObjectId(req.params.artid)
+        }, {
+          $push: {commentlist: commt._id}
+        }, function(err) {
+          if (!err) {
+            console.log('masuk')
+            res.status(200).json({
+              message: `succesfully create comment`,
+              commt
+            });
+          } else {
+            console.log('masuk else')
+            res.status(500).json({
+              message: err.message
+            });
+          }
+        })
       } else {
+        console.log('masuk else 2')
         res.status(500).json({
           message: err.message
         });
@@ -40,7 +68,7 @@ module.exports = {
   },
 
   remove: (req, res) => {
-    console.log('masuk controllers/comments -> delete')
+    console.log("masuk controllers/comments -> delete");
     Comment.deleteOne(
       {
         _id: ObjectId(req.params.id)
@@ -48,7 +76,7 @@ module.exports = {
       function(err) {
         if (!err) {
           res.status(200).json({
-            message: `succesfully deleted comment`
+            message: `succesfully delete comment`
           });
         } else {
           res.status(500).json({

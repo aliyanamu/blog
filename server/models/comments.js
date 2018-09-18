@@ -4,12 +4,12 @@ const mongoose = require("mongoose"),
 const commentScheme = new Schema(
   {
     owner: {
-        required: [true, 'owner is required'],
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+      required: [true, "owner is required"],
+      type: Schema.Types.ObjectId,
+      ref: "User"
     },
     comment: {
-        type: String
+      type: String
     }
   },
   {
