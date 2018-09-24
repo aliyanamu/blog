@@ -1,11 +1,18 @@
 const Article = require("../models/articles"),
+  Comment = require("../models/comments")
   ObjectId = require("mongodb").ObjectId;
 
 module.exports = {
   list: (req, res) => {
     console.log('masuk controllers/articles -> list')
     Article.find()
-      .populate("commentlist")
+      .populate("author")
+      .populate({
+        path: "commentlist",
+        populate: {
+          path: "owner"
+        }
+      })
       .exec(function(err, articles) {
         if (err) {
           res.status(500).json({
@@ -19,16 +26,43 @@ module.exports = {
       });
   },
 
+  getArticleById: (req, res) => {
+    console.log('masuk controllers/articles -> getById')
+    Article.find({
+      _id: ObjectId(req.params.id)
+    })
+      .populate("author")
+      .populate({
+        path: "commentlist",
+        populate: {
+          path: "owner"
+        }
+      })
+      .exec(function(err, article) {
+        if (err) {
+          console.log('error ni', err)
+          res.status(500).json({
+            message: err.message
+          });
+        } else {
+          console.log('masuk', article)
+          res.status(200).json({
+            article: article
+          });
+        }
+      });
+  },
+
   getMyArticle: (req, res) => {
     console.log('masuk controllers/articles -> list my articles')
     Article.find({
-      author: req.params.userid
+      author: req.userId
     })
       .populate("author")
       .exec(function(err, data) {
         if (!err) {
           res.status(200).json({
-            message: `get all of my articles`,
+            message: `get all of my articles`,  
             data
           });
         } else {
@@ -42,9 +76,9 @@ module.exports = {
   insert: (req, res) => {
     console.log('masuk controllers/articles -> create')
     let arts = new Article({
-      // user: req.userId
+      // user: req.body.author,
       title: req.body.title,
-      author: req.body.author,
+      author: req.userId,
       desc: req.body.desc,
       category: req.body.category,
       commentlist: req.body.commentlist
@@ -66,12 +100,10 @@ module.exports = {
   update: (req, res) => {
     console.log('masuk controllers/articles -> update')
     const upd = {
-      _id: req.body.articleId,
       title: req.body.title,
-      author: req.body.author,
+      author: req.userId,
       desc: req.body.desc,
-      category: req.body.category,
-      commentlist: req.body.commentlist
+      category: req.body.category
     };
     Article.updateOne({
         _id: req.params.id

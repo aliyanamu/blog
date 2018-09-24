@@ -6,7 +6,8 @@ const express = require('express'),
       jwt = require('jsonwebtoken'),
       bodyParser= require('body-parser');
 
-const usersRouter = require('./routes/users'),
+const indexRouter = require('./routes/index'),
+      usersRouter = require('./routes/users'),
       articlesRouter = require('./routes/articles'),
       commentsRouter = require('./routes/comments');
 
@@ -47,6 +48,7 @@ app
 
 
 app
+  .use('/', indexRouter)
   .use('/users', usersRouter)
   .use('/articles', articlesRouter)
   .use('/comments', commentsRouter);

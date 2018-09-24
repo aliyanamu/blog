@@ -9,7 +9,7 @@ module.exports = {
       _id: ObjectId(req.params.artid)
     })
       .populate("commentlist")
-      .exec(function(err, article) {
+      .exec(function(err) {
         if (err) {
           res.status(500).json({
             message: err.message
@@ -32,10 +32,29 @@ module.exports = {
       });
   },
 
+  findById: (req, res) => {
+    console.log("masuk controllers/comments -> owner");
+    Comment.find({
+      _id: ObjectId(req.params.comid)
+    })
+      .populate("owner")
+      .exec(function(err, comment) {
+        if (err) {
+          res.status(500).json({
+            message: err.message
+          });
+        } else {
+          res.status(200).json({
+            comment: comment
+          });
+        }
+      });
+  },
+
   insert: (req, res) => {
     console.log("masuk controllers/comments -> create");
     let commt = new Comment({
-      owner: req.body.owner,
+      owner: req.userId,
       comment: req.body.comment
     });
     commt.save(function(err) {
@@ -69,15 +88,32 @@ module.exports = {
 
   remove: (req, res) => {
     console.log("masuk controllers/comments -> delete");
-    Comment.deleteOne(
-      {
-        _id: ObjectId(req.params.id)
-      },
-      function(err) {
-        if (!err) {
-          res.status(200).json({
-            message: `succesfully delete comment`
-          });
+    Comment.find({
+      _id: ObjectId(req.params.id)
+    },
+      function(err, comment) {
+        if (comment) {
+          if (String(comment[0].owner) === String(req.userId)) {
+            Comment.deleteOne({
+              _id: ObjectId(req.params.id),
+              owner: req.userId
+            },    
+            function(err) {
+              if (!err) {
+                res.status(200).json({
+                  message: `succesfully delete comment`
+                })
+              } else {
+                res.status(500).json({
+                  message: err.message
+                })
+              }
+            })
+          } else {
+            res.status(500).json({
+              message: 'not your own comment'
+            });
+          }
         } else {
           res.status(500).json({
             message: err.message
