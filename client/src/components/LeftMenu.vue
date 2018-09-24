@@ -40,7 +40,7 @@ export default {
       articles: [],
       searchData: '',
       notif: '',
-      baseUrl: 'http://localhost:3000'
+      baseUrl: 'http://myblog-server.hanabc.xyz'
     }
   },
   props: ['isLogin'],

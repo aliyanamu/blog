@@ -19,12 +19,11 @@ export default {
       author: '',
       category: '',
       notif: '',
-      baseUrl: 'http://localhost:3000'
+      baseUrl: 'http://myblog-server.hanabc.xyz'
     }
   },
   methods: {
     createPost () {
-      console.log('klik submit')
       axios({
         method: 'POST',
         url: this.baseUrl + `/articles`,
@@ -39,7 +38,6 @@ export default {
       })
         .then(response => {
           this.notif = response.data.message
-          console.log('masuk sini', this.notif)
           this.$router.push('/articles')
         })
         .catch(err => {

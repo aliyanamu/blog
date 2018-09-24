@@ -17,8 +17,7 @@ let PORT = 3000 || PORT;
 //Connecting to Mongoose
 const mongoose   = require('mongoose'),
       urltest = `mongodb://localhost:27017/blog-test`,
-      url = `mongodb://illion01:illion01@ds255262.mlab.com:55262/blog`;
-
+      url = `mongodb://illion01:illion01@ds125021.mlab.com:25021/blog`;
 
 if (process.env.NODE_ENV === 'test') {
   console.log('ready to test our server')

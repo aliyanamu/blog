@@ -24,7 +24,7 @@ export default {
     return {
       email: '',
       password: '',
-      baseUrl: 'http://localhost:3000',
+      baseUrl: 'http://myblog-server.hanabc.xyz',
       notif: ''
     }
   },

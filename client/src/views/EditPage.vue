@@ -19,7 +19,7 @@ export default {
       category: '',
       notif: '',
       article: {},
-      baseUrl: 'http://localhost:3000'
+      baseUrl: 'http://myblog-server.hanabc.xyz'
     }
   },
   methods: {
@@ -41,7 +41,6 @@ export default {
         })
     },
     editPost () {
-      console.log('klik submit')
       axios({
         method: 'PUT',
         url: this.baseUrl + `/articles/${this.$route.params.id}`,
@@ -55,7 +54,6 @@ export default {
         }
       })
         .then(response => {
-          console.log('masuk edit', response)
           this.notif = response.data.message
           this.$router.push('/articles')
         })

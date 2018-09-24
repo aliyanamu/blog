@@ -46,7 +46,7 @@ export default {
       comments: [],
       notif: '',
       self: '',
-      baseUrl: 'http://localhost:3000'
+      baseUrl: 'http://myblog-server.hanabc.xyz'
     }
   },
   methods: {
@@ -58,7 +58,6 @@ export default {
         .get(this.baseUrl + `/articles/${this.$route.params.id}`)
         .then(response => {
           this.article = response.data.article[0]
-          console.log(response.data.article[0])
           this.comments = response.data.article[0].commentlist
         })
         .catch(err => {
@@ -74,7 +73,6 @@ export default {
         }
       })
         .then(response => {
-          console.log(response.data)
           this.$router.push('/articles')
         })
         .catch(err => {
@@ -93,13 +91,12 @@ export default {
         }
       })
         .then(response => {
-          console.log('masuk edit', response)
           this.notif = response.data.message
           this.$router.push('/articles')
         })
         .catch(err => {
           console.log('get error', err.response)
-          this.$router.push('/')
+          this.$router.push('/articles')
         })
     },
     formatDateInput (input) {

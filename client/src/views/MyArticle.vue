@@ -22,7 +22,7 @@ export default {
   props: ['isLogin'],
   data () {
     return {
-      baseUrl: 'http://localhost:3000',
+      baseUrl: 'http://myblog-server.hanabc.xyz',
       notif: ''
     }
   },

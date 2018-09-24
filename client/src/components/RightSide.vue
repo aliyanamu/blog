@@ -10,7 +10,7 @@ export default {
   name: 'right-side',
   data () {
     return {
-      baseUrl: 'http://localhost:3000'
+      baseUrl: 'http://myblog-server.hanabc.xyz'
     }
   },
   props: ['isLogin', 'articles'],
